@@ -1,0 +1,56 @@
+from sklearn import tree
+from sklearn import svm
+from sklearn.metrics import accuracy_score
+from sklearn import neighbors
+from sklearn.naive_bayes import GaussianNB
+import operator
+
+def keywithmaxval(d):
+     """ a) create a list of the dict's keys and values;
+         b) return the key with the max value"""
+     v=list(d.values())
+     k=list(d.keys())
+     return k[v.index(max(v))]
+
+# data train [height,weight, shoe size]
+X = [[181, 80, 44], [177, 70, 43], [160, 60, 38], [154, 54, 37], [166, 65, 40], [190, 90, 47], [175, 64, 39],[177, 70, 40], [159, 55, 37], [171, 75, 42], [181, 85, 43]]
+
+Y = ['male', 'male', 'female', 'female', 'male', 'male', 'female', 'female', 'female', 'male', 'male']
+
+#classifiers
+clf = []
+clf.append(tree.DecisionTreeClassifier())
+clf.append(svm.SVC())
+clf.append(neighbors.KNeighborsClassifier())
+clf.append(GaussianNB())
+#train model
+Train =[]
+for i in range(4):
+    Train.append(clf[i].fit(X,Y))
+
+
+
+_X=[[184,84,44],[198,92,48],[183,83,44],[166,47,36],[170,60,38],[172,64,39],[182,80,42],[180,80,43]]
+_Y=['male','male','male','female','female','female','male','male']
+
+#prediction
+prediction = []
+for i in range (4):
+    prediction.append(Train[i].predict(_X))
+
+#results
+r = []
+for i in range (4):
+    r.append(accuracy_score(_Y,prediction[i]))
+
+print(r[1:])
+
+best = {'svm':r[1],'neighbors':r[2],'GaussianNB':r[3]}
+a = keywithmaxval(best)
+print(a)
+#if r1 > r2 and r1 > r3:#
+#	print("SVM : ",r1)
+#elif r2 > r3 and r2 > r1:
+#	print("KNeighborsClassifier : ",r2)
+#else :
+#	print("Naive : ",r3)
